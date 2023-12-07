@@ -22,10 +22,13 @@
             <TextBox Width="500"
                      Height="30"
                      VerticalContentAlignment="Center"
-                     FontSize="20"
-                     Padding="10,0,10,0" />
+                     Padding="3" 
+                     x:Name="SearchInput"/>
             <Button Width="50"
-                    Height="30" />
+                    Height="30" 
+                    x:Name="SearchBarSearch"
+                    Click="SearchBarSearch_Click"
+                    Content="Szukaj"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"

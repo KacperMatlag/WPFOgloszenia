@@ -29,7 +29,8 @@ namespace WPFOgloszenia {
                 await CompanyRepository.CreateIfNotExistsAsync();
                 await TypeOfWorkRepository.CreateIfNotExistsAsync();
                 await AnnouncementRepository.CreateIfNotExistsAsync();
-
+                await ProfileRepository.CreateIfNotExistsAsync();
+                await UserRepository.CreateIfNotExistsAsync();
 
             } catch (Exception e) {
                 MessageBox.Show(e.Message);
@@ -48,7 +49,7 @@ namespace WPFOgloszenia {
             DragMove();
         }
 
-        private void MenuLogin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        public void MenuLogin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (NavigationFrame?.Content is Page page && page.Title != "LoginRegisterPage") {
                 NavigationFrame?.Navigate(new LoginRegisterPage());
             }

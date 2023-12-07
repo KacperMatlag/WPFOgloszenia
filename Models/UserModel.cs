@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WPFOgloszenia.Models {
-    internal class UserModel {
-        public int ID { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Email { get; set; }
-        public int Permision { get; set; }
+    public class UserModel {
+        public int? ID { get; set; }
+        public string? Login { get; set; }
+        public string? Password { get; set; }
+        public int? Permission { get; set; }
+        public int? ProfileID { get; set; }
+        //Join Model
+        public ProfileModel? Profile { get; set; }
     }
 }

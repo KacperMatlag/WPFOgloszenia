@@ -14,8 +14,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid VerticalAlignment="Center"
-              Grid.Column="0">
+        <Grid Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -33,27 +32,39 @@
             <TextBox x:Name="Login"
                      Grid.Column="1"
                      Grid.Row="1"
-                     Margin="10" />
+                     Margin="10" 
+                     VerticalContentAlignment="Center"
+                     Padding="3"/>
             <PasswordBox x:Name="Password"
                          Grid.Column="1"
                          Grid.Row="2"
-                         Margin="10" />
+                         Margin="10"
+                         VerticalContentAlignment="Center"
+                         Padding="3" />
             <PasswordBox x:Name="PasswordConfirm"
                          Grid.Column="1"
                          Grid.Row="3"
-                         Margin="10" />
+                         Margin="10"
+                         VerticalContentAlignment="Center"
+                         Padding="3" />
             <TextBox x:Name="Name"
                      Grid.Column="1"
                      Grid.Row="4"
-                     Margin="10" />
+                     Margin="10"
+                     VerticalContentAlignment="Center"
+                     Padding="3" />
             <TextBox x:Name="Surname"
                      Grid.Column="1"
                      Grid.Row="5"
-                     Margin="10" />
+                     Margin="10"
+                     VerticalContentAlignment="Center"
+                     Padding="3" />
             <TextBox x:Name="Email"
                      Grid.Column="1"
-                     Grid.Row="1"
-                     Margin="10" />
+                     Grid.Row="6"
+                     Margin="10"
+                     VerticalContentAlignment="Center"
+                     Padding="3" />
             <Label Content="Rejestracja"
                    HorizontalContentAlignment="Center"
                    VerticalContentAlignment="Center"
@@ -91,7 +102,57 @@
                     BorderThickness="0"
                     BorderBrush="Transparent"
                     Foreground="White"
-                    FontSize="20" />
+                    FontSize="20" 
+                    x:Name="Register"
+                    Click="Register_Click"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Label Content="Logowanie"
+                   HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center"
+                   Grid.Row="0"
+                   Grid.ColumnSpan="2" />
+            <Label Content="Login"
+                   Grid.Row="1"
+                   VerticalContentAlignment="Center"
+                   HorizontalContentAlignment="Center" />
+            <Label Content="Hasło"
+                   Grid.Row="2"
+                   VerticalContentAlignment="Center"
+                   HorizontalContentAlignment="Center" />
+            <TextBox x:Name="UserLogin"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     Margin="10"
+                     VerticalContentAlignment="Center"
+                     Padding="3" />
+            <PasswordBox x:Name="UserPassword"
+                     Grid.Column="1"
+                     Grid.Row="2"
+                     Margin="10"
+                     VerticalContentAlignment="Center"
+                     Padding="3" />
+            <Button Content="Zaloguj"
+                    Grid.Row="3"
+                    Grid.ColumnSpan="2"
+                    Margin="5"
+                    Background="Blue"
+                    BorderThickness="0"
+                    BorderBrush="Transparent"
+                    Foreground="White"
+                    FontSize="20"
+                    x:Name="LoginButton"
+                    Click="LoginButton_Click" />
         </Grid>
     </Grid>
 </Page>

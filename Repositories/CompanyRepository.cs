@@ -16,21 +16,23 @@ namespace WPFOgloszenia.Repositories {
             object? tableExistsResult = await tableExistsCommand.ExecuteScalarAsync();
 
             if (tableExistsResult == null) {
+                // Tabela nie istnieje, więc ją tworzymy
                 string createTableQuery = @"
-                    CREATE TABLE Companies
-                    (
-                        ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-                        Name NVARCHAR(MAX) NOT NULL,
-                        Description NVARCHAR(MAX),
-                        NIP INT,
-                        Location NVARCHAR(MAX),
-                        ImageLink NVARCHAR(MAX)
-                    );";
+            CREATE TABLE Companies
+            (
+                ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+                Name NVARCHAR(MAX) NOT NULL,
+                Description NVARCHAR(MAX),
+                NIP INT,
+                Location NVARCHAR(MAX),
+                ImageLink NVARCHAR(MAX)
+            );";
 
                 using SqlCommand createTableCommand = new(createTableQuery, connection);
                 await createTableCommand.ExecuteNonQueryAsync();
                 await SeedAsync();
             }
+
         }
         public static async Task<int> CreateAsync(Company company) {
             using SqlConnection connection = new(connectionString);

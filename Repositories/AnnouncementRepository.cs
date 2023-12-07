@@ -19,17 +19,17 @@ namespace WPFOgloszenia.Repositories {
             if (tableExistsResult == null) {
                 string createTableQuery = @"
                     CREATE TABLE Announcements
-                    (
-                        ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-                        Title NVARCHAR(MAX),
-                        Description NVARCHAR(MAX),
-                        CategoryID INT,
-                        CompanyID INT,
+            (
+                ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+                Title NVARCHAR(MAX),
+                Description NVARCHAR(MAX),
+                CategoryID INT,
+                CompanyID INT,
                         TypeOfWorkID INT,
-                        Position NVARCHAR(MAX),
-                        MinWage DECIMAL,
-                        MaxWage DECIMAL
-                    );";
+                Position NVARCHAR(MAX),
+                MinWage DECIMAL,
+                MaxWage DECIMAL
+            );";
 
                 using SqlCommand createTableCommand = new(createTableQuery, connection);
                 await createTableCommand.ExecuteNonQueryAsync().WaitAsync(TimeSpan.FromMilliseconds(5000));
@@ -87,10 +87,11 @@ namespace WPFOgloszenia.Repositories {
             INNER JOIN Categories ON Announcements.CategoryID = Categories.ID
             INNER JOIN Companies ON Announcements.CompanyID = Companies.ID
             INNER JOIN TypeOfWorks ON Announcements.TypeOfWorkID = TypeOfWorks.ID
+            WHERE Announcements.Title LIKE @Title_
             ";
 
             using SqlCommand command = new(query, connection);
-            command.Parameters.AddWithValue("@Title",title);
+            command.Parameters.AddWithValue("@Title_", $"%{title}%");
             using SqlDataReader reader = await command.ExecuteReaderAsync();
 
             List<AnnouncementModel> announcements = new();
@@ -114,6 +115,45 @@ namespace WPFOgloszenia.Repositories {
                         NIP = (int)reader["NIP"],
                         Description = reader["Description"].ToString(),
                         ImageLink = reader["ImageLink"].ToString(),
+                    }
+                };
+                announcements.Add(announcement);
+            }
+
+            return announcements;
+        }
+        public static async Task<List<AnnouncementModel>> GetByTitleAsync(string title) {
+            using SqlConnection connection = new(connectionString);
+            await connection.OpenAsync();
+
+            string query = @"
+        SELECT Announcement.ID, Announcement.Title, Announcement.Description, Announcement.CategoryID,
+        Announcement.CompanyID, Announcement.Position, Announcement.MinWage, Announcement.MaxWage,
+        Categories.Name AS CategoryName, Companies.Name AS CompanyName
+        FROM Announcement
+        INNER JOIN Categories ON Announcement.CategoryID = Categories.ID
+        INNER JOIN Companies ON Announcement.CompanyID = Companies.ID
+        WHERE Announcement.Title LIKE @Title";
+
+            using SqlCommand command = new(query, connection);
+            command.Parameters.AddWithValue("@Title", $"%{title}%"); // Użyj '%' jako symbol wieloznacznego dopasowania
+
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            List<AnnouncementModel> announcements = new();
+            while (await reader.ReadAsync()) {
+                AnnouncementModel announcement = new() {
+                    ID = (int)reader["ID"],
+                    Title = reader["Title"].ToString(),
+                    Description = reader["Description"].ToString(),
+                    CategoryID = (int)reader["CategoryID"],
+                    CompanyID = (int)reader["CompanyID"],
+                    Position = reader["Position"].ToString(),
+                    MinWage = (decimal)reader["MinWage"],
+                    MaxWage = (decimal)reader["MaxWage"],
+                    Category = new CategoryModel {
+                        ID = (int)reader["CategoryID"],
+                        Name = reader["CategoryName"].ToString()
                     },
                     TypeOfWork=new TypeOfWork() {
                         ID = (int)reader["TypeOfWorkID"],
@@ -229,7 +269,7 @@ namespace WPFOgloszenia.Repositories {
         public static async Task SeedAsync() {
             List<AnnouncementModel> announcements = new() {
                 new AnnouncementModel {
-                    Title = "Software Engineer Position",
+                    Title = "Robota 1",
                     Description = "We are hiring a skilled software engineer for our development team.",
                     CategoryID = 1,
                     CompanyID = 2,
@@ -239,7 +279,7 @@ namespace WPFOgloszenia.Repositories {
                     MaxWage = 70000,
                 },
                 new AnnouncementModel {
-                    Title = "Software Engineer Position",
+                    Title = "Robota 2",
                     Description = "We are hiring a skilled software engineer for our development team.",
                     CategoryID = 3,
                     CompanyID = 2,
@@ -249,7 +289,7 @@ namespace WPFOgloszenia.Repositories {
                     MaxWage = 70000,
                 },
                 new AnnouncementModel {
-                    Title = "Software Engineer Position",
+                    Title = "Robota 3",
                     Description = "We are hiring a skilled software engineer for our development team.",
                     CategoryID = 2,
                     CompanyID = 1,

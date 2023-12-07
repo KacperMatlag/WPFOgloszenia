@@ -16,9 +16,18 @@ namespace WPFOgloszenia.Views {
             InitializeComponent();
             Setup();
         }
-        private async void Setup() {
-            var a = await AnnouncementRepository.GetAllAsync();
-            foreach (var item in await AnnouncementRepository.GetAllAsync()) {
+        private void Setup() {
+            RenderAnnoucementList("");
+        }
+
+        private void SearchBarSearch_Click(object sender, RoutedEventArgs e) {
+            RenderAnnoucementList(SearchInput.Text);
+        }
+
+        private async void RenderAnnoucementList(string filter) {
+            List.Children.Clear();
+
+            foreach (var item in await AnnouncementRepository.GetAllAsync(filter)) {
                 List.Children.Add(new AnnouncementControl(item));
                 List.Children.Add(new StackPanel() {
                     Width = 800, Height = 3,
@@ -27,16 +36,14 @@ namespace WPFOgloszenia.Views {
                     Margin = new Thickness(30),
                 });
             }
+
             foreach (var item in List.Children.OfType<AnnouncementControl>().ToList()) {
                 item.MouseLeftButtonDown += (sender, e) => {
-                    if(Application.Current.MainWindow is MainWindow window) {
+                    if (Application.Current.MainWindow is MainWindow window) {
                         window.NavigationFrame.Navigate(new AnnouncementsView(item._ID));
                     }
                 };
             }
-        }
-        private void NavigateToItemPage(object sender, MouseButtonEventArgs e) {
-            MessageBox.Show("123");
         }
     }
 }

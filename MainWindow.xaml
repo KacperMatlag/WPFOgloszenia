@@ -59,6 +59,7 @@
                            MouseLeave="Label_MouseLeave"
                            MouseLeftButtonDown="MenuLogin_MouseLeftButtonDown"
                            Width="100"
+                           x:Name="LoginLogOut"
                            HorizontalContentAlignment="Center"/>
                 </StackPanel>
                 <StackPanel x:Name="MenuMainPage"
