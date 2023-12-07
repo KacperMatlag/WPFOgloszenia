@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using WPFOgloszenia.Repositories;
 using WPFOgloszenia.Models;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace WPFOgloszenia.Controls {
         public int _ID;
         public AnnouncementControl() {
             InitializeComponent();
+
         }
         public AnnouncementControl(AnnouncementModel model) {
             InitializeComponent();

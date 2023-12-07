@@ -17,11 +17,11 @@ namespace WPFOgloszenia.Repositories {
 
             if (tableExistsResult == null) {
                 string createTableQuery = @"
-                    CREATE TABLE Categories
-                    (
-                        ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-                        Name NVARCHAR(MAX) NOT NULL
-                    );";
+            CREATE TABLE Categories
+            (
+                ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+                Name NVARCHAR(MAX) NOT NULL
+            );";
                 using SqlCommand createTableCommand = new(createTableQuery, connection);
                 await createTableCommand.ExecuteNonQueryAsync();
                 await SeedAsync();
