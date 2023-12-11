@@ -11,7 +11,9 @@ namespace WPFOgloszenia.Models {
         public string? Password { get; set; }
         public int? Permission { get; set; }
         public int? ProfileID { get; set; }
+        public int? CompanyID { get; set; }
         //Join Model
         public ProfileModel? Profile { get; set; }
+        public Company? Company { get; set; }
     }
 }

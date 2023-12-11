@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using WPFOgloszenia.Models;
 using WPFOgloszenia.Repositories;
@@ -31,19 +32,27 @@ namespace WPFOgloszenia.Views {
                 Password = PasswordHandling.HashPassword(Password.Password),
                 Permission = 1,
                 ProfileID = inserttedProfileID,
+                CompanyID=null,
+                Company=null,
             };
-            await UserRepository.CreateAsync(user);
+            int userID = await UserRepository.CreateAsync(user);
+            App.User = await UserRepository.GetOneAsync(userID);
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e) {
             string Login = UserLogin.Text;
             string Password = UserPassword.Password;
             UserModel? user = await UserRepository.GetOneAsync(Login, Password);
-            if (user is not null) {
+            if (user is not null && Application.Current.MainWindow is MainWindow window) {
                 App.User = user;
-                LoginAndLogoutHandling.LoginChanges();
-            }
-            else
+                window.LoginLogOut.Content = "Wyloguj się";
+                window.LoginLogOut.MouseLeftButtonDown -= window.MenuLogin_MouseLeftButtonDown;
+                window.LoginLogOut.MouseLeftButtonDown += window.MenuLogOut_MouseLeftButtonDown;
+                window.NavigationFrame.Navigate(new AnnouncementList());
+                window.UserName.Content = $"Zalogowano jako: {App.User.Login}";
+                if (App.User.Permission == 2)
+                    window.Addannoucement.Visibility = Visibility.Visible;
+            } else
                 MessageBox.Show("Niepoprawy Login lub Hasło");
         }
     }

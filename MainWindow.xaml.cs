@@ -7,6 +7,7 @@ using WPFOgloszenia.Views;
 using WPFOgloszenia.Repositories;
 using System.Threading.Tasks;
 using System;
+using WPFOgloszenia.Windows;
 
 namespace WPFOgloszenia {
     /// <summary>
@@ -31,7 +32,6 @@ namespace WPFOgloszenia {
                 await AnnouncementRepository.CreateIfNotExistsAsync();
                 await ProfileRepository.CreateIfNotExistsAsync();
                 await UserRepository.CreateIfNotExistsAsync();
-
             } catch (Exception e) {
                 MessageBox.Show(e.Message);
                 throw;
@@ -54,6 +54,17 @@ namespace WPFOgloszenia {
                 NavigationFrame?.Navigate(new LoginRegisterPage());
             }
         }
+
+        public void MenuLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            App.User = null;
+            LoginLogOut.Content = "Zaloguj się";
+            LoginLogOut.MouseLeftButtonDown += MenuLogin_MouseLeftButtonDown;
+            LoginLogOut.MouseLeftButtonDown -= MenuLogOut_MouseLeftButtonDown;
+            UserName.Content = "Niezalogowano";
+            Addannoucement.Visibility = Visibility.Hidden;
+
+        }
+
         private void SelectClickedOption(object sender, MouseButtonEventArgs e) {
             foreach (var item in Menu.Children.OfType<StackPanel>().ToList()) {
                 if (item.Children[0] is Label label1) {
@@ -81,6 +92,14 @@ namespace WPFOgloszenia {
         private void Label_MouseLeave(object sender, MouseEventArgs e) {
             if (sender is Label label)
                 label.Foreground = Brushes.Black;
+        }
+
+        private void Addannoucement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if (App.User is not null && App.User.Company is null) {
+                CompanyCreate company=new CompanyCreate();
+                company.ShowDialog();
+            }
+                
         }
     }
 }

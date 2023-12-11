@@ -18,15 +18,15 @@ namespace WPFOgloszenia.Repositories {
             if (tableExistsResult == null) {
                 // Tabela nie istnieje, więc ją tworzymy
                 string createTableQuery = @"
-            CREATE TABLE Companies
-            (
-                ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-                Name NVARCHAR(MAX) NOT NULL,
-                Description NVARCHAR(MAX),
-                NIP INT,
-                Location NVARCHAR(MAX),
-                ImageLink NVARCHAR(MAX)
-            );";
+                    CREATE TABLE Companies
+                    (
+                        ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+                        Name NVARCHAR(MAX) NOT NULL,
+                        Description NVARCHAR(MAX),
+                        NIP INT,
+                        Location NVARCHAR(MAX),
+                        ImageLink NVARCHAR(MAX)
+                    );";
 
                 using SqlCommand createTableCommand = new(createTableQuery, connection);
                 await createTableCommand.ExecuteNonQueryAsync();
@@ -47,7 +47,7 @@ namespace WPFOgloszenia.Repositories {
             command.Parameters.AddWithValue("@Name", company.Name);
             command.Parameters.AddWithValue("@Description", company.Description);
             command.Parameters.AddWithValue("@NIP", company.NIP);
-            command.Parameters.AddWithValue("@Location", company.Location);
+            command.Parameters.AddWithValue("@Location", "123");
             command.Parameters.AddWithValue("@ImageLink", company.ImageLink);
 
             return Convert.ToInt32(await command.ExecuteScalarAsync());

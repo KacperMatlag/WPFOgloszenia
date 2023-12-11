@@ -27,7 +27,8 @@ namespace WPFOgloszenia.Repositories {
                         Login NVARCHAR(MAX),
                         Password NVARCHAR(MAX),
                         Permission INT,
-                        ProfileID INT FOREIGN KEY REFERENCES Profiles(ID)
+                        ProfileID INT NULL FOREIGN KEY REFERENCES Profiles(ID),
+                        CompanyID INT NULL FOREIGN KEY REFERENCES Companies(ID)
                     );";
 
                 using SqlCommand createTableCommand = new(createTableQuery, connection);
@@ -41,11 +42,16 @@ namespace WPFOgloszenia.Repositories {
             await connection.OpenAsync();
 
             string query = @"
-                INSERT INTO Users (Login, Password, ProfileID, Permission)
-                VALUES (@Login, @Password, @ProfileID, @Permission);
+                INSERT INTO Users (Login, Password, ProfileID, Permission,CompanyID)
+                VALUES (@Login, @Password, @ProfileID, @Permission, @CompanyID);
                 SELECT SCOPE_IDENTITY();";
 
             using SqlCommand command = new(query, connection);
+            if (user.CompanyID.HasValue) {
+                command.Parameters.AddWithValue("@CompanyID", user.CompanyID);
+            } else {
+                command.Parameters.AddWithValue("@CompanyID", DBNull.Value);
+            }
             command.Parameters.AddWithValue("@Login", user.Login);
             command.Parameters.AddWithValue("@Password", user.Password);
             command.Parameters.AddWithValue("@ProfileID", user.ProfileID);
@@ -90,12 +96,35 @@ namespace WPFOgloszenia.Repositories {
                     Login = reader["Login"].ToString(),
                     Password = reader["Password"].ToString(),
                     Profile = await ProfileRepository.GetByIdAsync((int)reader["ProfileID"]),
-                    Permission = (int)reader["Permission"]
+                    Permission = (int)reader["Permission"],
+                    CompanyID = reader["CompanyID"] != DBNull.Value ? (int)reader["CompanyID"] : (int?)null,
+                    Company = reader["CompanyID"] != DBNull.Value ? await CompanyRepository.GetByIdAsync((int)reader["CompanyID"]) : null,
                 };
                 if (PasswordHandling.VerifyPassword(password, user.Password ?? ""))
                     return user;
                 else
                     return null;
+            }
+            return null;
+        }
+        public static async Task<UserModel?> GetOneAsync(int ID) {
+            using SqlConnection connection = new(connectionString);
+            await connection.OpenAsync();
+            string query = "SELECT TOP(1) * FROM Users WHERE ID=@ID";
+            SqlCommand command = new(query, connection);
+            command.Parameters.AddWithValue("@ID", ID);
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync()) {
+                UserModel? user = new() {
+                    ID = (int)reader["ID"],
+                    Login = reader["Login"].ToString(),
+                    Password = reader["Password"].ToString(),
+                    Profile = await ProfileRepository.GetByIdAsync((int)reader["ProfileID"]),
+                    Permission = (int)reader["Permission"],
+                    CompanyID = reader["CompanyID"] != DBNull.Value ? (int)reader["CompanyID"] : (int?)null,
+                    Company = reader["CompanyID"] != DBNull.Value ? await CompanyRepository.GetByIdAsync((int)reader["CompanyID"]) : null,
+                };
+                return user;
             }
             return null;
         }
