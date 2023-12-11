@@ -12,6 +12,7 @@ namespace WPFOgloszenia.Windows {
         }
         private void MinimalizeWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             WindowState = WindowState.Minimized;
+
         }
 
         private void CloseWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
