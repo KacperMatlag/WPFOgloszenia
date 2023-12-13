@@ -6,10 +6,9 @@ using WPFOgloszenia.Models;
 using WPFOgloszenia.Repositories;
 
 namespace WPFOgloszenia.Repositories {
-    public static class AnnouncementRepository {
-        private static readonly string connectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=Ogloszenia;Integrated Security=True";
+    public static class AnnouncementRepository { 
         public static async Task CreateIfNotExistsAsync() {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string tableExistsQuery = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Announcements'";
@@ -25,7 +24,7 @@ namespace WPFOgloszenia.Repositories {
                 Description NVARCHAR(MAX),
                 CategoryID INT,
                 CompanyID INT,
-                        TypeOfWorkID INT,
+                TypeOfWorkID INT,
                 Position NVARCHAR(MAX),
                 MinWage DECIMAL,
                 MaxWage DECIMAL
@@ -40,7 +39,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<int> CreateAsync(AnnouncementModel announcement) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -62,7 +61,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<List<AnnouncementModel>> GetAllAsync(string title="") {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -123,7 +122,7 @@ namespace WPFOgloszenia.Repositories {
             return announcements;
         }
         public static async Task<List<AnnouncementModel>> GetByTitleAsync(string title) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -166,7 +165,7 @@ namespace WPFOgloszenia.Repositories {
             return announcements;
         }
         public static async Task<AnnouncementModel?> GetByIdAsync(int id) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -232,7 +231,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> UpdateAsync(AnnouncementModel announcement) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -256,7 +255,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> DeleteAsync(int id) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = "DELETE FROM Announcement WHERE ID = @ID";

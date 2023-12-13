@@ -8,9 +8,8 @@ using WPFOgloszenia.Models;
 
 namespace WPFOgloszenia.Repositories {
     public class ProfileRepository {
-        private static readonly string connectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=Ogloszenia;Integrated Security=True";
         public static async Task CreateIfNotExistsAsync() {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string tableExistsQuery = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Profiles'";
@@ -33,7 +32,7 @@ namespace WPFOgloszenia.Repositories {
             }
         }
         public static async Task<int> CreateAsync(ProfileModel profile) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -50,7 +49,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<List<ProfileModel>> GetAllAsync() {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = "SELECT * FROM Profiles";
@@ -72,7 +71,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<ProfileModel?> GetByIdAsync(int id) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = "SELECT * FROM Profiles WHERE ID = @ID";
@@ -95,7 +94,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> UpdateAsync(ProfileModel profile) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -113,7 +112,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> DeleteAsync(int id) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = "DELETE FROM Profiles WHERE ID = @ID";

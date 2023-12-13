@@ -26,15 +26,26 @@ namespace WPFOgloszenia.Views {
                 Surname = Name.Text,
                 Email = Name.Text,
             };
-            int inserttedProfileID = await ProfileRepository.CreateAsync(profile);
+
+            if (profile.Validate() is not null) {
+                MessageBox.Show(profile.Validate());
+                return;
+            }
             UserModel user = new() {
                 Login = Login.Text,
                 Password = PasswordHandling.HashPassword(Password.Password),
                 Permission = 1,
-                ProfileID = inserttedProfileID,
+                ProfileID = -1,
                 CompanyID=null,
                 Company=null,
             };
+
+            if (user.Validate() is not null) {
+                MessageBox.Show(profile.Validate());
+                return;
+            }
+            int inserttedProfileID = await ProfileRepository.CreateAsync(profile);
+            user.ProfileID = inserttedProfileID;
             int userID = await UserRepository.CreateAsync(user);
             App.User = await UserRepository.GetOneAsync(userID);
         }

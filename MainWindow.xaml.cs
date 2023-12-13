@@ -96,8 +96,10 @@ namespace WPFOgloszenia {
 
         private void Addannoucement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (App.User is not null && App.User.Company is null) {
-                CompanyCreate company=new CompanyCreate();
+                CompanyCreate company = new();
                 company.ShowDialog();
+            } else {
+                NavigationFrame.Navigate(new AnnouncementCreate());
             }
                 
         }

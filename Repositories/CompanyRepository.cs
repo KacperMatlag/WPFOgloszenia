@@ -6,9 +6,8 @@ using WPFOgloszenia.Models;
 
 namespace WPFOgloszenia.Repositories {
     public static class CompanyRepository {
-        private static readonly string connectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=Ogloszenia;Integrated Security=True";
         public static async Task CreateIfNotExistsAsync() {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string tableExistsQuery = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Companies'";
@@ -35,7 +34,7 @@ namespace WPFOgloszenia.Repositories {
 
         }
         public static async Task<int> CreateAsync(Company company) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -54,7 +53,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<List<Company>> GetAllAsync() {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = "SELECT * FROM Companies";
@@ -78,7 +77,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<Company?> GetByIdAsync(int id) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = "SELECT * FROM Companies WHERE ID = @ID";
@@ -103,7 +102,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> UpdateAsync(Company company) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -123,7 +122,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> DeleteAsync(int id) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = "DELETE FROM Companies WHERE ID = @ID";

@@ -8,9 +8,8 @@ using WPFOgloszenia.Models;
 
 namespace WPFOgloszenia.Repositories {
     public class TypeOfWorkRepository {
-        private static readonly string connectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=Ogloszenia;Integrated Security=True";
         public static async Task CreateIfNotExistsAsync() {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             string tableExistsQuery = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'TypeOfWorks'";
 
 
@@ -35,7 +34,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<List<TypeOfWork>> GetAllAsync() {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "SELECT * FROM TypeOfWorks";
             using SqlCommand command = new SqlCommand(query, connection);
@@ -52,7 +51,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<TypeOfWork?> GetByIdAsync(int id) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
             string query = "SELECT * FROM TypeOfWorks WHERE ID = @ID";
             using SqlCommand command = new SqlCommand(query, connection);
@@ -69,7 +68,7 @@ namespace WPFOgloszenia.Repositories {
                 return null;
         }
         public static async Task AddAsync(TypeOfWork category) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "INSERT INTO TypeOfWorks (Name) VALUES (@Name)";
             using SqlCommand command = new SqlCommand(query, connection);
@@ -78,7 +77,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task UpdateAsync(TypeOfWork category) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "UPDATE TypeOfWorks SET Name = @Name WHERE ID = @ID";
             using SqlCommand command = new(query, connection);

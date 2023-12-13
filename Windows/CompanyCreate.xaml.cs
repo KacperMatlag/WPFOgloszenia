@@ -30,6 +30,8 @@ namespace WPFOgloszenia.Windows {
                 ImageLink=CompanyImageUrl.Text,
             };
             int companyID=await CompanyRepository.CreateAsync(company);
+            await UserRepository.SetUserCompany(companyID, App.User?.ID);
+            App.User = await UserRepository.GetOneAsync(App.User?.ID);
         }
     }
 }

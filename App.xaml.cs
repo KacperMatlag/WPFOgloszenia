@@ -13,5 +13,6 @@ namespace WPFOgloszenia {
     /// </summary>
     public partial class App : Application {
         public static UserModel? User = null;
+        public static readonly string connectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=Ogloszenia;Integrated Security=True";
     }
 }

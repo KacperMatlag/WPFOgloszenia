@@ -9,10 +9,8 @@ using WPFOgloszenia.Supports;
 
 namespace WPFOgloszenia.Repositories {
     public class UserRepository {
-        private static readonly string connectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=Ogloszenia;Integrated Security=True";
-
         public static async Task CreateIfNotExistsAsync() {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string tableExistsQuery = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Users'";
@@ -38,7 +36,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<int> CreateAsync(UserModel user) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
@@ -61,7 +59,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<List<UserModel>> GetAllAsync() {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
 
             string query = "SELECT * FROM Users";
@@ -84,7 +82,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<UserModel?> GetOneAsync(string login, string password) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "SELECT TOP(1) * FROM Users WHERE Login=@Login";
             SqlCommand command = new(query, connection);
@@ -107,8 +105,19 @@ namespace WPFOgloszenia.Repositories {
             }
             return null;
         }
-        public static async Task<UserModel?> GetOneAsync(int ID) {
-            using SqlConnection connection = new(connectionString);
+
+        public static async Task SetUserCompany(int? companyID, int? UserID) {
+            using SqlConnection connection = new(App.connectionString);
+            await connection.OpenAsync();
+            string query = "Update Users SET CompanyID=@CompanyID WHERE ID=@UserID";
+            SqlCommand command = new(query, connection);
+            command.Parameters.AddWithValue("@CompanyID", companyID);
+            command.Parameters.AddWithValue("@UserID", UserID);
+            await command.ExecuteNonQueryAsync();
+        }
+
+        public static async Task<UserModel?> GetOneAsync(int? ID) {
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "SELECT TOP(1) * FROM Users WHERE ID=@ID";
             SqlCommand command = new(query, connection);
@@ -130,7 +139,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> IsLoginExists(string login) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "SELECT TOP(1) * FROM Users WHERE Login=@Login";
             SqlCommand command = new(query, connection);

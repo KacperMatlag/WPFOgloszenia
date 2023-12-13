@@ -6,9 +6,8 @@ using WPFOgloszenia.Models;
 
 namespace WPFOgloszenia.Repositories {
     public static class CategoryRepository {
-        private static readonly string connectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=Ogloszenia;Integrated Security=True";
         public static async Task CreateIfNotExistsAsync() {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             string tableExistsQuery = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Categories'";
             await connection.OpenAsync();
 
@@ -29,7 +28,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<List<CategoryModel>> GetAllAsync() {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "SELECT * FROM Categories";
             using SqlCommand command = new SqlCommand(query, connection);
@@ -46,7 +45,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<CategoryModel?> GetByIdAsync(int id) {
-            using SqlConnection connection = new SqlConnection(connectionString);
+            using SqlConnection connection = new SqlConnection(App.connectionString);
             await connection.OpenAsync();
             string query = "SELECT * FROM Categories WHERE ID = @ID";
             using SqlCommand command = new SqlCommand(query, connection);
@@ -63,7 +62,7 @@ namespace WPFOgloszenia.Repositories {
                 return null;
         }
         public static async Task AddAsync(CategoryModel category) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "INSERT INTO Categories (Name) VALUES (@Name)";
             using SqlCommand command = new SqlCommand(query, connection);
@@ -72,7 +71,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task UpdateAsync(CategoryModel category) {
-            using SqlConnection connection = new(connectionString);
+            using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
             string query = "UPDATE Categories SET Name = @Name WHERE ID = @ID";
             using SqlCommand command = new(query, connection);
