@@ -103,5 +103,11 @@ namespace WPFOgloszenia {
             }
                 
         }
+
+        private void UserName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if(App.User is not null) {
+                NavigationFrame.Navigate(new ProfileView());
+            }
+        }
     }
 }

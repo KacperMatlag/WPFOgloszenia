@@ -100,6 +100,30 @@ namespace WPFOgloszenia.Repositories {
                 return null;
             }
         }
+        public static async Task<List<Company>> GetAllByNameAsync(string name = "") {
+            using SqlConnection connection = new(App.connectionString);
+            await connection.OpenAsync();
+
+            string query = "SELECT * FROM Companies WHERE Name Like @Name";
+            using SqlCommand command = new(query, connection);
+            command.Parameters.AddWithValue("@Name",$"%{name}%");
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            List<Company> companies = new List<Company>();
+            while (await reader.ReadAsync()) {
+                Company company = new Company {
+                    ID = (int)reader["ID"],
+                    Name = reader["Name"].ToString(),
+                    Description = reader["Description"].ToString(),
+                    NIP = (int)reader["NIP"],
+                    Location = reader["Location"].ToString(),
+                    ImageLink = reader["ImageLink"].ToString()
+                };
+                companies.Add(company);
+            }
+
+            return companies;
+        }
 
         public static async Task<bool> UpdateAsync(Company company) {
             using SqlConnection connection = new(App.connectionString);

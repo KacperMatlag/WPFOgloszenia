@@ -149,5 +149,20 @@ namespace WPFOgloszenia.Repositories {
                 return true;
             return false;
         }
+
+        public static async Task<bool> PasswordChange(UserModel? user,string? newPassword,string? oldPassword) {
+            if (!PasswordHandling.VerifyPassword(oldPassword, user?.Password??"")) {
+                return false;
+            }
+            using SqlConnection connection = new(App.connectionString);
+            await connection.OpenAsync();
+            string query = "Update Users SET Password=@Password Where ID=@ID";
+            string newPasswordHashed=PasswordHandling.HashPassword(newPassword??"");
+            SqlCommand command = new(query, connection);
+            command.Parameters.AddWithValue("@Password",newPasswordHashed);
+            command.Parameters.AddWithValue("@ID",user?.ID);
+            command.ExecuteNonQuery();
+            return true;
+        }
     }
 }

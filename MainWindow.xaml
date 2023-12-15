@@ -108,7 +108,8 @@
                    Content="Niezalogowany"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   FontSize="20" />
+                   FontSize="20" 
+                   MouseLeftButtonDown="UserName_MouseLeftButtonDown"/>
         </Border>
     </Grid>
 </Window>

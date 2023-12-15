@@ -12,6 +12,8 @@ namespace WPFOgloszenia.Views {
     public partial class LoginRegisterPage : Page {
         public LoginRegisterPage() {
             InitializeComponent();
+            UserLogin.Text = "Login";
+            UserPassword.Password = "Password";
         }
 
         private async void Register_Click(object sender, RoutedEventArgs e) {
@@ -61,8 +63,7 @@ namespace WPFOgloszenia.Views {
                 window.LoginLogOut.MouseLeftButtonDown += window.MenuLogOut_MouseLeftButtonDown;
                 window.NavigationFrame.Navigate(new AnnouncementList());
                 window.UserName.Content = $"Zalogowano jako: {App.User.Login}";
-                if (App.User.Permission == 2)
-                    window.Addannoucement.Visibility = Visibility.Visible;
+                window.Addannoucement.Visibility = Visibility.Visible;
             } else
                 MessageBox.Show("Niepoprawy Login lub Hasło");
         }

@@ -135,7 +135,7 @@ namespace WPFOgloszenia.Repositories {
         WHERE Announcement.Title LIKE @Title";
 
             using SqlCommand command = new(query, connection);
-            command.Parameters.AddWithValue("@Title", $"%{title}%"); // Użyj '%' jako symbol wieloznacznego dopasowania
+            command.Parameters.AddWithValue("@Title", $"%{title}%");
 
             using SqlDataReader reader = await command.ExecuteReaderAsync();
 
@@ -216,7 +216,7 @@ namespace WPFOgloszenia.Repositories {
                         Name = reader["CompanyName"].ToString(),
                         ImageLink = reader["ImageLink"].ToString(),
                         NIP = (int)reader["NIP"],
-                        Description = reader["Description"].ToString(),
+                        Description = reader["CompanyDescription"].ToString(),
                     },
                     TypeOfWork = new TypeOfWork() {
                         ID = (int)reader["TypeOfWorkID"],

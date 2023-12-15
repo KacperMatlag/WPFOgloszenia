@@ -20,7 +20,7 @@ namespace WPFOgloszenia.Models {
             if (string.IsNullOrEmpty(Login) || Login.Length < 5 || Login.Length > 30 || string.IsNullOrEmpty(Login)) {
                 return ("Login musi mieć od 5 do 30 znaków.");
             }
-            if (string.IsNullOrEmpty(Password) || Password.Length < 5 || Password.Length > 30 || string.IsNullOrEmpty(Password)) {
+            if (string.IsNullOrEmpty(Password) || Password.Length < 5 || string.IsNullOrEmpty(Password)) {
                 return ("Hasło musi mieć od 5 do 30 znaków.");
             }
             return null;
