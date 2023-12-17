@@ -41,6 +41,7 @@ namespace WPFOgloszenia.Windows {
             await UserRepository.SetUserCompany(companyID, App.User?.ID);
             App.User = await UserRepository.GetOneAsync(App.User?.ID);
             this.Close();
+            MessageBox.Show($"FUstawiono firme na:  {App.User?.Company?.Name}");
         }
 
         private async void CompanySearch_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) {
@@ -52,6 +53,7 @@ namespace WPFOgloszenia.Windows {
                 await UserRepository.SetUserCompany(company.ID, App.User?.ID);
                 App.User = await UserRepository.GetOneAsync(App.User?.ID);
                 this.Close();
+                MessageBox.Show($"FUstawiono firme na:  {App.User?.Company?.Name}");
             }
         }
     }

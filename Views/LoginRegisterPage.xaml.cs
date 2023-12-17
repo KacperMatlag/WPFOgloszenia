@@ -33,9 +33,10 @@ namespace WPFOgloszenia.Views {
                 MessageBox.Show(profile.Validate());
                 return;
             }
+
             UserModel user = new() {
                 Login = Login.Text,
-                Password = PasswordHandling.HashPassword(Password.Password),
+                Password = Password.Password,
                 Permission = 1,
                 ProfileID = -1,
                 CompanyID=null,
@@ -46,10 +47,16 @@ namespace WPFOgloszenia.Views {
                 MessageBox.Show(profile.Validate());
                 return;
             }
+
+            user.Password=PasswordHandling.HashPassword(user.Password);
             int inserttedProfileID = await ProfileRepository.CreateAsync(profile);
             user.ProfileID = inserttedProfileID;
             int userID = await UserRepository.CreateAsync(user);
             App.User = await UserRepository.GetOneAsync(userID);
+            if (Application.Current.MainWindow is MainWindow window) {
+                window.NavigationFrame.Navigate(new AnnouncementList());
+                window.MenuSelectionChange(window.MainList);
+            }
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e) {
@@ -61,9 +68,10 @@ namespace WPFOgloszenia.Views {
                 window.LoginLogOut.Content = "Wyloguj się";
                 window.LoginLogOut.MouseLeftButtonDown -= window.MenuLogin_MouseLeftButtonDown;
                 window.LoginLogOut.MouseLeftButtonDown += window.MenuLogOut_MouseLeftButtonDown;
-                window.NavigationFrame.Navigate(new AnnouncementList());
                 window.UserName.Content = $"Zalogowano jako: {App.User.Login}";
                 window.Addannoucement.Visibility = Visibility.Visible;
+                window.MenuSelectionChange(window.MainList);
+                window.NavigationFrame.Navigate(new AnnouncementList());
             } else
                 MessageBox.Show("Niepoprawy Login lub Hasło");
         }

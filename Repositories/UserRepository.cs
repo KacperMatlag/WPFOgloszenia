@@ -25,13 +25,22 @@ namespace WPFOgloszenia.Repositories {
                         Login NVARCHAR(MAX),
                         Password NVARCHAR(MAX),
                         Permission INT,
-                        ProfileID INT NULL FOREIGN KEY REFERENCES Profiles(ID),
-                        CompanyID INT NULL FOREIGN KEY REFERENCES Companies(ID)
+                        ProfileID INT NULL,
+                        CompanyID INT NULL
                     );";
 
                 using SqlCommand createTableCommand = new(createTableQuery, connection);
                 await createTableCommand.ExecuteNonQueryAsync();
-                //await SeedAsync();
+                await SeedAsync();
+                //Relacje
+                string relations =
+                    "ALTER TABLE Users " +
+                    "ADD CONSTRAINT FK_NazwaRelacji " +
+                    "FOREIGN KEY (ProfileID) " +
+                    "REFERENCES Profiles(ID);";
+                SqlCommand command = new(relations, connection);
+                await command.ExecuteNonQueryAsync();
+
             }
         }
 
@@ -151,7 +160,7 @@ namespace WPFOgloszenia.Repositories {
         }
 
         public static async Task<bool> PasswordChange(UserModel? user,string? newPassword,string? oldPassword) {
-            if (!PasswordHandling.VerifyPassword(oldPassword, user?.Password??"")) {
+            if (!PasswordHandling.VerifyPassword(oldPassword??"", user?.Password??"")) {
                 return false;
             }
             using SqlConnection connection = new(App.connectionString);
@@ -163,6 +172,32 @@ namespace WPFOgloszenia.Repositories {
             command.Parameters.AddWithValue("@ID",user?.ID);
             command.ExecuteNonQuery();
             return true;
+        }
+
+        public static async Task SeedAsync() {
+            using SqlConnection connection = new(App.connectionString);
+            await connection.OpenAsync();
+            List<UserModel> userModels = new() {
+                new UserModel {
+                    ID = 1,
+                    Login="Login",
+                    Password=PasswordHandling.HashPassword("Password"),
+                    CompanyID=1,
+                    Permission=2,
+                    ProfileID=1,
+                },
+                new UserModel {
+                    ID = 2,
+                    Login="Login1",
+                    Password=PasswordHandling.HashPassword("Password1"),
+                    CompanyID=1,
+                    Permission=1,
+                    ProfileID=1,
+                }
+            };
+
+            foreach (UserModel userModel in userModels)
+                await CreateAsync(userModel);
         }
     }
 }

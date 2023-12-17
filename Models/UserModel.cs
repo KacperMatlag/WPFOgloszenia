@@ -12,7 +12,7 @@ namespace WPFOgloszenia.Models {
         public int? Permission { get; set; }
         public int? ProfileID { get; set; }
         public int? CompanyID { get; set; }
-        //Join Model
+        //Join Models
         public ProfileModel? Profile { get; set; }
         public Company? Company { get; set; }
 
@@ -20,7 +20,7 @@ namespace WPFOgloszenia.Models {
             if (string.IsNullOrEmpty(Login) || Login.Length < 5 || Login.Length > 30 || string.IsNullOrEmpty(Login)) {
                 return ("Login musi mieć od 5 do 30 znaków.");
             }
-            if (string.IsNullOrEmpty(Password) || Password.Length < 5 || string.IsNullOrEmpty(Password)) {
+            if (string.IsNullOrEmpty(Password) || Password.Length < 5 || Password.Length > 40 || string.IsNullOrEmpty(Password)) {
                 return ("Hasło musi mieć od 5 do 30 znaków.");
             }
             return null;

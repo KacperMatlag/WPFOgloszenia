@@ -6,7 +6,7 @@ using WPFOgloszenia.Models;
 using WPFOgloszenia.Repositories;
 
 namespace WPFOgloszenia.Repositories {
-    public static class AnnouncementRepository { 
+    public static class AnnouncementRepository {
         public static async Task CreateIfNotExistsAsync() {
             using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
@@ -27,12 +27,19 @@ namespace WPFOgloszenia.Repositories {
                 TypeOfWorkID INT,
                 Position NVARCHAR(MAX),
                 MinWage DECIMAL,
-                MaxWage DECIMAL
+                MaxWage DECIMAL,
+                UserID INT NULL
             );";
 
                 using SqlCommand createTableCommand = new(createTableQuery, connection);
                 await createTableCommand.ExecuteNonQueryAsync().WaitAsync(TimeSpan.FromMilliseconds(5000));
                 await SeedAsync();
+                //Relacje
+
+                string relations =
+                    "ALTER TABLE Announcements\r\nADD CONSTRAINT FK_NazwaRelacji2\r\nFOREIGN KEY (UserID)\r\nREFERENCES Users(ID);\r\n\r\nALTER TABLE Announcements\r\nADD CONSTRAINT FK_NazwaRelacji3\r\nFOREIGN KEY (TypeOfWorkID)\r\nREFERENCES TypeOfWorks(ID);\r\n\r\nALTER TABLE Announcements\r\nADD CONSTRAINT FK_NazwaRelacji4\r\nFOREIGN KEY (CompanyID)\r\nREFERENCES Companies(ID);\r\n\r\nALTER TABLE Announcements\r\nADD CONSTRAINT FK_NazwaRelacji5\r\nFOREIGN KEY (CategoryID)\r\nREFERENCES Categories(ID);";
+                SqlCommand command = new(relations, connection);
+                await command.ExecuteNonQueryAsync();
             }
 
 
@@ -43,8 +50,8 @@ namespace WPFOgloszenia.Repositories {
             await connection.OpenAsync();
 
             string query = @"
-                INSERT INTO Announcements (Title, Description, CategoryID, CompanyID, TypeOfWorkID, Position, MinWage, MaxWage)
-                VALUES (@Title, @Description, @CategoryID, @CompanyID,@TypeOfWorkID, @Position, @MinWage, @MaxWage);
+                INSERT INTO Announcements (Title, Description, CategoryID, CompanyID, TypeOfWorkID, Position, MinWage, MaxWage,UserID)
+                VALUES (@Title, @Description, @CategoryID, @CompanyID,@TypeOfWorkID, @Position, @MinWage, @MaxWage,@UserID);
                 SELECT SCOPE_IDENTITY();";
 
             using SqlCommand command = new(query, connection);
@@ -56,11 +63,15 @@ namespace WPFOgloszenia.Repositories {
             command.Parameters.AddWithValue("@Position", announcement.Position);
             command.Parameters.AddWithValue("@MinWage", announcement.MinWage);
             command.Parameters.AddWithValue("@MaxWage", announcement.MaxWage);
+            if (announcement.UserID == null)
+                command.Parameters.AddWithValue("@UserID", DBNull.Value);
+            else
+                command.Parameters.AddWithValue("@UserID", announcement.UserID);
 
             return Convert.ToInt32(await command.ExecuteScalarAsync());
         }
 
-        public static async Task<List<AnnouncementModel>> GetAllAsync(string title="") {
+        public static async Task<List<AnnouncementModel>> GetAllAsync(string title = "") {
             using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
@@ -126,13 +137,13 @@ namespace WPFOgloszenia.Repositories {
             await connection.OpenAsync();
 
             string query = @"
-        SELECT Announcement.ID, Announcement.Title, Announcement.Description, Announcement.CategoryID,
-        Announcement.CompanyID, Announcement.Position, Announcement.MinWage, Announcement.MaxWage,
+        SELECT Announcements.ID, Announcements.Title, Announcements.Description, Announcements.CategoryID,
+        Announcements.CompanyID, Announcements.Position, Announcements.MinWage, Announcements.MaxWage,
         Categories.Name AS CategoryName, Companies.Name AS CompanyName
-        FROM Announcement
-        INNER JOIN Categories ON Announcement.CategoryID = Categories.ID
-        INNER JOIN Companies ON Announcement.CompanyID = Companies.ID
-        WHERE Announcement.Title LIKE @Title";
+        FROM Announcements
+        INNER JOIN Categories ON Announcements.CategoryID = Categories.ID
+        INNER JOIN Companies ON Announcements.CompanyID = Companies.ID
+        WHERE Announcements.Title LIKE @Title";
 
             using SqlCommand command = new(query, connection);
             command.Parameters.AddWithValue("@Title", $"%{title}%");
@@ -154,10 +165,45 @@ namespace WPFOgloszenia.Repositories {
                         ID = (int)reader["CategoryID"],
                         Name = reader["CategoryName"].ToString()
                     },
-                    TypeOfWork=new TypeOfWork() {
+                    TypeOfWork = new TypeOfWork() {
                         ID = (int)reader["TypeOfWorkID"],
                         Name = reader["TypeOfWorkName"].ToString(),
                     }
+                };
+                announcements.Add(announcement);
+            }
+
+            return announcements;
+        }
+        public static async Task<List<AnnouncementModel>> GetByUser(int? userID) {
+            using SqlConnection connection = new(App.connectionString);
+            await connection.OpenAsync();
+
+            string query = @"
+        SELECT Announcements.ID, Announcements.Title, Announcements.Description, Announcements.CategoryID,
+        Announcements.CompanyID, Announcements.Position, Announcements.MinWage, Announcements.MaxWage,
+        Categories.Name AS CategoryName, Companies.Name AS CompanyName
+        FROM Announcements
+        INNER JOIN Categories ON Announcements.CategoryID = Categories.ID
+        INNER JOIN Companies ON Announcements.CompanyID = Companies.ID
+        WHERE Announcements.UserID =@UserID";
+
+            using SqlCommand command = new(query, connection);
+            command.Parameters.AddWithValue("@UserID", userID);
+
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            List<AnnouncementModel> announcements = new();
+            while (await reader.ReadAsync()) {
+                AnnouncementModel announcement = new() {
+                    ID = (int)reader["ID"],
+                    Title = reader["Title"].ToString(),
+                    Description = reader["Description"].ToString(),
+                    CategoryID = (int)reader["CategoryID"],
+                    CompanyID = (int)reader["CompanyID"],
+                    Position = reader["Position"].ToString(),
+                    MinWage = (decimal)reader["MinWage"],
+                    MaxWage = (decimal)reader["MaxWage"],
                 };
                 announcements.Add(announcement);
             }
@@ -178,6 +224,7 @@ namespace WPFOgloszenia.Repositories {
                 Announcements.Position,
                 Announcements.MinWage,
                 Announcements.MaxWage,
+                Announcements.UserID,
                 Categories.Name AS CategoryName,
                 Companies.Name AS CompanyName,
                 Companies.NIP,
@@ -207,6 +254,7 @@ namespace WPFOgloszenia.Repositories {
                     Position = reader["Position"].ToString(),
                     MinWage = (decimal)reader["MinWage"],
                     MaxWage = (decimal)reader["MaxWage"],
+                    UserID = (int)reader["UserID"],
                     Category = new CategoryModel {
                         ID = (int)reader["CategoryID"],
                         Name = reader["CategoryName"].ToString()
@@ -230,13 +278,14 @@ namespace WPFOgloszenia.Repositories {
             }
         }
 
+
         public static async Task<bool> UpdateAsync(AnnouncementModel announcement) {
             using SqlConnection connection = new(App.connectionString);
             await connection.OpenAsync();
 
             string query = @"
-                UPDATE Announcement
-                SET Title = @Title, Description = @Description, CategoryID = @CategoryID, CompanyID = @CompanyID, TypeOfWorkID=@TypeOFWorkID
+                UPDATE Announcements
+                SET Title = @Title, Description = @Description, CategoryID = @CategoryID, CompanyID = @CompanyID, TypeOfWorkID=@TypeOFWorkID,
                 Position = @Position, MinWage = @MinWage, MaxWage = @MaxWage
                 WHERE ID = @ID";
 
@@ -276,6 +325,7 @@ namespace WPFOgloszenia.Repositories {
                     Position = "Software Engineer",
                     MinWage = 50000,
                     MaxWage = 70000,
+                    UserID=1,
                 },
                 new AnnouncementModel {
                     Title = "Robota 2",
@@ -286,6 +336,7 @@ namespace WPFOgloszenia.Repositories {
                     Position = "Software Engineer",
                     MinWage = 60000,
                     MaxWage = 70000,
+                    UserID=1,
                 },
                 new AnnouncementModel {
                     Title = "Robota 3",
@@ -296,6 +347,7 @@ namespace WPFOgloszenia.Repositories {
                     Position = "Software Engineer",
                     MinWage = 70000,
                     MaxWage = 70000,
+                    UserID=1,
                 },
             };
 

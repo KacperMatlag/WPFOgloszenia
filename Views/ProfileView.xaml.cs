@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFOgloszenia.Models;
 using WPFOgloszenia.Repositories;
+using WPFOgloszenia.Windows;
 
 namespace WPFOgloszenia.Views {
     /// <summary>
@@ -21,13 +23,44 @@ namespace WPFOgloszenia.Views {
     public partial class ProfileView : Page {
         public ProfileView() {
             InitializeComponent();
+            EditName.Text = App.User?.Profile?.Name;
+            EditSurname.Text = App.User?.Profile?.Surname;
+            EditEmail.Text = App.User?.Profile?.Email;
+            Setup();
         }
-
+        private async void Setup() {
+            UsersAnnouncements.ItemsSource= await AnnouncementRepository.GetByUser(App.User?.ID);
+        }
         private async void PasswordChange_Click(object sender, RoutedEventArgs e) {
             if (await UserRepository.PasswordChange(App.User, NewPassword.Text, OldPassword.Text))
                 MessageBox.Show("Hasło pomyślnie zmienione");
             else
                 MessageBox.Show("Podano niepoprawne stare haslo");
+        }
+
+        private void CompanyChange_Click(object sender, RoutedEventArgs e) {
+            CompanyCreate companyCreate = new();
+            companyCreate.ShowDialog();
+        }
+
+        private async void EditProfile_Click(object sender, RoutedEventArgs e) {
+            ProfileModel? toUpdate = App.User?.Profile;
+            if (toUpdate != null) {
+                toUpdate.Name = EditName.Text;
+                toUpdate.Surname = EditSurname.Text;
+                toUpdate.Email = EditEmail.Text;
+
+                if(await ProfileRepository.UpdateAsync(toUpdate))
+                    MessageBox.Show("Pomyślnie uaktualniono profil");
+                else
+                    MessageBox.Show("Wystapił błąd");
+            }
+        }
+
+        private void UsersAnnouncements_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            if (UsersAnnouncements.SelectedItem is AnnouncementModel a)
+                if (Application.Current.MainWindow is MainWindow window)
+                    window.NavigationFrame.Navigate(new AnnouncementCreate(a));
         }
     }
 }

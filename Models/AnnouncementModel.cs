@@ -11,6 +11,7 @@ namespace WPFOgloszenia.Models {
         public string? Position { get; set; }
         public decimal? MinWage { get; set; }
         public decimal? MaxWage { get; set; }
+        public int? UserID { get; set; }
         //Join Models
         public CategoryModel? Category { get; set; }
         public Company? Company { get; set; }
