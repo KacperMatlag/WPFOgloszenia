@@ -39,8 +39,8 @@ namespace WPFOgloszenia.Views {
                 Password = Password.Password,
                 Permission = 1,
                 ProfileID = -1,
-                CompanyID=null,
-                Company=null,
+                CompanyID = null,
+                Company = null,
             };
 
             if (user.Validate() is not null) {
@@ -48,14 +48,19 @@ namespace WPFOgloszenia.Views {
                 return;
             }
 
-            user.Password=PasswordHandling.HashPassword(user.Password);
+            user.Password = PasswordHandling.HashPassword(user.Password);
             int inserttedProfileID = await ProfileRepository.CreateAsync(profile);
             user.ProfileID = inserttedProfileID;
             int userID = await UserRepository.CreateAsync(user);
             App.User = await UserRepository.GetOneAsync(userID);
             if (Application.Current.MainWindow is MainWindow window) {
-                window.NavigationFrame.Navigate(new AnnouncementList());
+                window.LoginLogOut.Content = "Wyloguj się";
+                window.LoginLogOut.MouseLeftButtonDown -= window.MenuLogin_MouseLeftButtonDown;
+                window.LoginLogOut.MouseLeftButtonDown += window.MenuLogOut_MouseLeftButtonDown;
+                window.UserName.Content = $"Zalogowano jako: {App.User.Login}";
+                window.Addannoucement.Visibility = Visibility.Visible;
                 window.MenuSelectionChange(window.MainList);
+                window.NavigationFrame.Navigate(new AnnouncementList());
             }
         }
 
