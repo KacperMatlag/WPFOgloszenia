@@ -189,7 +189,15 @@ namespace WPFOgloszenia.Repositories {
                 new UserModel {
                     ID = 2,
                     Login="Login1",
-                    Password=PasswordHandling.HashPassword("Password1"),
+                    Password=PasswordHandling.HashPassword("Password"),
+                    CompanyID=1,
+                    Permission=1,
+                    ProfileID=1,
+                },
+                new UserModel {
+                    ID = 2,
+                    Login="Login2",
+                    Password=PasswordHandling.HashPassword("Password"),
                     CompanyID=1,
                     Permission=1,
                     ProfileID=1,

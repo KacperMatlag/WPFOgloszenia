@@ -31,6 +31,7 @@ namespace WPFOgloszenia {
                 await ProfileRepository.CreateIfNotExistsAsync();
                 await UserRepository.CreateIfNotExistsAsync();
                 await AnnouncementRepository.CreateIfNotExistsAsync();
+                await ApplicationForAdvertisementRepository.CreateIfNotExistsAsync();
             } catch (Exception e) {
                 MessageBox.Show(e.Message);
                 throw;

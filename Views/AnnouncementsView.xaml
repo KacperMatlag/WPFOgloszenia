@@ -18,6 +18,15 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
+                    <StackPanel HorizontalAlignment="Left"
+                                Orientation="Horizontal">
+                        <Button Content="Aplikuj"
+                                Width="100"
+                                Margin="10"
+                                x:Name="ApplicationButton"
+                                Click="ApplicationRequest_Click" />
+                        <Label VerticalContentAlignment="Center" x:Name="ApplicationCounter"/>
+                    </StackPanel>
                     <Label Content="{Binding Title}"
                            FontSize="20"
                            HorizontalContentAlignment="Center" />

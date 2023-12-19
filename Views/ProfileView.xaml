@@ -5,174 +5,207 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:WPFOgloszenia.Views"
       mc:Ignorable="d"
-      d:DesignHeight="450"
+      d:DesignHeight="950"
       d:DesignWidth="800"
       Title="ProfileView">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"
-                    Grid.Column="0"
-                    VerticalAlignment="Center">
-            <Grid Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="40" />
-                </Grid.RowDefinitions>
-                <Label Content="Zmiana hasła"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       HorizontalContentAlignment="Center"
-                       VerticalContentAlignment="Center"
-                       FontSize="20"
-                       Foreground="Purple" />
-                <Label Content="Stare Hasło"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="20"
-                       Grid.Column="0"
-                       Grid.Row="1" />
-                <Label Content="Nowe Hasło"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="20"
-                       Grid.Column="0"
-                       Grid.Row="2" />
-                <TextBox Grid.Column="1"
-                         Grid.Row="1"
-                         Margin="5"
-                         VerticalContentAlignment="Center"
-                         Padding="3,0"
-                         x:Name="OldPassword" />
-                <TextBox Grid.Column="1"
-                         Grid.Row="2"
-                         Margin="5"
-                         VerticalContentAlignment="Center"
-                         Padding="3,0"
-                         x:Name="NewPassword" />
-                <Button Content="Zmień hasło"
-                        Grid.ColumnSpan="2"
-                        Grid.Row="3"
-                        Background="Blue"
-                        Foreground="White"
-                        FontSize="20"
-                        x:Name="PasswordChange"
-                        Click="PasswordChange_Click" />
-            </Grid>
-        </StackPanel>
-        <StackPanel Grid.Column="0"
-                    Grid.Row="1"
-                    VerticalAlignment="Center"
-                    Margin="10">
-            <Label Content="Firma przypisana do konta"
-                   HorizontalContentAlignment="Center"
-                   Foreground="Purple"
-                   FontSize="20" />
-            <Button Content="Zmień firme"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="3"
-                    Margin="3"
-                    Background="Blue"
-                    Foreground="White"
-                    FontSize="20"
-                    x:Name="CompanyChange"
-                    Click="CompanyChange_Click"
-                    Padding="5" />
-        </StackPanel>
-        <Grid Grid.Column="1"
-              Grid.Row="0"
-              Margin="10">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label FontSize="20"
-                   Content="Edycja Profilu"
-                   Foreground="Purple"
-                   Grid.ColumnSpan="2"
-                   VerticalContentAlignment="Center"
-                   HorizontalContentAlignment="Center" />
-            <Label FontSize="20"
-                   Content="Imie"
-                   Grid.Column="0"
-                   Grid.Row="1"
-                   VerticalAlignment="Center"
-                   HorizontalContentAlignment="Center" />
-            <Label FontSize="20"
-                   Content="Nazwisko"
-                   Grid.Column="0"
-                   Grid.Row="2"
-                   VerticalAlignment="Center"
-                   HorizontalContentAlignment="Center" />
-            <Label FontSize="20"
-                   Content="Email"
-                   Grid.Column="0"
-                   Grid.Row="3"
-                   VerticalAlignment="Center"
-                   HorizontalContentAlignment="Center" />
-            <TextBox Grid.Column="1"
-                     Grid.Row="1"
-                     x:Name="EditName"
-                     Margin="10"
-                     VerticalContentAlignment="Center" />
-            <TextBox Grid.Column="1"
-                     Grid.Row="2"
-                     x:Name="EditSurname"
-                     Margin="10"
-                     VerticalContentAlignment="Center" />
-            <TextBox Grid.Column="1"
-                     Grid.Row="3"
-                     x:Name="EditEmail"
-                     Margin="10"
-                     VerticalContentAlignment="Center" />
-            <Button Content="Edytuj Profil"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="4"
-                    Background="Blue"
-                    FontSize="20"
-                    Foreground="White"
-                    x:Name="EditProfile"
-                    Click="EditProfile_Click" />
+            <StackPanel Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalAlignment="Center">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Zmiana hasła"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"
+                           FontSize="20"
+                           Foreground="Purple" />
+                    <Label Content="Stare Hasło"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Grid.Column="0"
+                           Grid.Row="1" />
+                    <Label Content="Nowe Hasło"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Grid.Column="0"
+                           Grid.Row="2" />
+                    <TextBox Grid.Column="1"
+                             Grid.Row="1"
+                             Margin="5"
+                             VerticalContentAlignment="Center"
+                             Padding="3,0"
+                             x:Name="OldPassword" />
+                    <TextBox Grid.Column="1"
+                             Grid.Row="2"
+                             Margin="5"
+                             VerticalContentAlignment="Center"
+                             Padding="3,0"
+                             x:Name="NewPassword" />
+                    <Button Content="Zmień hasło"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="3"
+                            Background="Blue"
+                            Foreground="White"
+                            FontSize="20"
+                            x:Name="PasswordChange"
+                            Click="PasswordChange_Click" />
+                </Grid>
+            </StackPanel>
+            <StackPanel Grid.Column="0"
+                        Grid.Row="1"
+                        VerticalAlignment="Center"
+                        Margin="10">
+                <Label Content="Firma przypisana do konta"
+                       HorizontalContentAlignment="Center"
+                       Foreground="Purple"
+                       FontSize="20" />
+                <Button Content="Zmień firme"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="3"
+                        Margin="3"
+                        Background="Blue"
+                        Foreground="White"
+                        FontSize="20"
+                        x:Name="CompanyChange"
+                        Click="CompanyChange_Click"
+                        Padding="5" />
+            </StackPanel>
+            <Grid Grid.Column="1"
+                  Grid.Row="0"
+                  Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label FontSize="20"
+                       Content="Edycja Profilu"
+                       Foreground="Purple"
+                       Grid.ColumnSpan="2"
+                       VerticalContentAlignment="Center"
+                       HorizontalContentAlignment="Center" />
+                <Label FontSize="20"
+                       Content="Imie"
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       VerticalAlignment="Center"
+                       HorizontalContentAlignment="Center" />
+                <Label FontSize="20"
+                       Content="Nazwisko"
+                       Grid.Column="0"
+                       Grid.Row="2"
+                       VerticalAlignment="Center"
+                       HorizontalContentAlignment="Center" />
+                <Label FontSize="20"
+                       Content="Email"
+                       Grid.Column="0"
+                       Grid.Row="3"
+                       VerticalAlignment="Center"
+                       HorizontalContentAlignment="Center" />
+                <TextBox Grid.Column="1"
+                         Grid.Row="1"
+                         x:Name="EditName"
+                         Margin="10"
+                         VerticalContentAlignment="Center" />
+                <TextBox Grid.Column="1"
+                         Grid.Row="2"
+                         x:Name="EditSurname"
+                         Margin="10"
+                         VerticalContentAlignment="Center" />
+                <TextBox Grid.Column="1"
+                         Grid.Row="3"
+                         x:Name="EditEmail"
+                         Margin="10"
+                         VerticalContentAlignment="Center" />
+                <Button Content="Edytuj Profil"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="4"
+                        Background="Blue"
+                        FontSize="20"
+                        Foreground="White"
+                        x:Name="EditProfile"
+                        Click="EditProfile_Click" />
+            </Grid>
+            <StackPanel Grid.Row="1"
+                        Grid.Column="1">
+                <Label Content="Twoje ogłoszenia"
+                       FontSize="20"
+                       Foreground="Purple"
+                       HorizontalContentAlignment="Center" />
+                <ListView x:Name="UsersAnnouncements"
+                          Height="150"
+                          MouseDoubleClick="UsersAnnouncements_MouseDoubleClick"
+                          d:ItemsSource="{d:SampleData ItemCount=5}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Tytuł"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding Title}" />
+                            <GridViewColumn Header="Pozycja"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding Position}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
+            <StackPanel Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Orientation="Vertical">
+                <Label FontSize="20"
+                       Foreground="Purple"
+                       Content="Aplikacje na twoje ogloszenia"
+                       HorizontalContentAlignment="Center" />
+                <ListView Margin="10"
+                          x:Name="Applications"
+                          MouseDoubleClick="Applications_MouseDoubleClick" Height="300"
+                          d:ItemsSource="{d:SampleData ItemCount=5}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Nazwa Uzytkownika"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding User.Login}" />
+                            <GridViewColumn Header="Ogloszenie"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding Announcement.Title}" />
+                            <GridViewColumn Header="Pozycja"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding Announcement.Position}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="2"
-                    Grid.Column="1">
-            <Label Content="Twoje ogłoszenia"
-                   FontSize="20"
-                   Foreground="Purple"
-                   HorizontalContentAlignment="Center" />
-            <ListView x:Name="UsersAnnouncements" Height="150" MouseDoubleClick="UsersAnnouncements_MouseDoubleClick">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Tytuł"
-                                        Width="200"
-                                        DisplayMemberBinding="{Binding Title}" />
-                        <GridViewColumn Header="Pozycja"
-                                        Width="200"
-                                        DisplayMemberBinding="{Binding Position}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Page>

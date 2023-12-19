@@ -30,6 +30,7 @@ namespace WPFOgloszenia.Views {
         }
         private async void Setup() {
             UsersAnnouncements.ItemsSource= await AnnouncementRepository.GetByUser(App.User?.ID);
+            Applications.ItemsSource = await ApplicationForAdvertisementRepository.GetAllApplications(App.User?.ID??0);
         }
         private async void PasswordChange_Click(object sender, RoutedEventArgs e) {
             if (await UserRepository.PasswordChange(App.User, NewPassword.Text, OldPassword.Text))
@@ -61,6 +62,14 @@ namespace WPFOgloszenia.Views {
             if (UsersAnnouncements.SelectedItem is AnnouncementModel a)
                 if (Application.Current.MainWindow is MainWindow window)
                     window.NavigationFrame.Navigate(new AnnouncementCreate(a));
+        }
+
+        private void Applications_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            if(Applications.SelectedItem is ApplicationForAdvertisement a) {
+                ShowApplicationInfo info = new(a);
+                info.ShowDialog();
+            }
+
         }
     }
 }
